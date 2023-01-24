@@ -1,0 +1,26 @@
+{
+  "name": "project_1",
+  "version": "1.0.0",
+  "description": "This is the Foundations project using Express, Node.js, Postman, and DynamoDB for an Employee Reimbursement Claim API",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Kratisatu/Project_1.git"
+  },
+  "author": "Christian McKinnon",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Kratisatu/Project_1/issues"
+  },
+  "homepage": "https://github.com/Kratisatu/Project_1#readme",
+  "dependencies": {
+    "aws-sdk": "^2.1300.0",
+    "bluebird": "^3.7.2",
+    "body-parser": "^1.20.1",
+    "express": "^4.18.2",
+    "jsonwebtoken": "^9.0.0"
+  }
+}
