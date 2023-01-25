@@ -49,12 +49,31 @@ router.post('/login', async (req, res) => {
     // }
 
 });
+//Register New User
+router.post('/users', async (req, res) => {
+    const username = req.body.username;
+    const password = req.body.password;
 
-router.post('/users', (req, res) => {
-    res.send({
-        "message": "POST /users endpoint reached"
+    //Check to see if username already exists
+    const data = await userDao.retrieveUserByUsername(username);
+    if(data.Item){//user exists
+        res.statusCode = 400;
+        res.send({
+            "message": "Username already taken"
+        })
 
-    })
+    } else {
+
+        await userDao.registerUser(username, password);
+        //res.statusCode = 200;
+        res.send({
+            "message": "User successfully registered"
+        })
+    }
+
+
 });
+
+
 
 module.exports = router;
