@@ -19,6 +19,16 @@ router.post('/reimbursements', async (req, res) => {
         if (tokenPayload.role === 'employee') {
             // if employee, then add reimbursement
             await reimbursementDao.addReimbursement(tokenPayload.username, req.body.amount, req.body.description);
+
+            if(req.body.amount===undefined){
+                res.send({
+                    "message": "You must enter a specified amount"
+                })
+            } else if(req.body.description===undefined){
+                res.send({
+                    "message": "You must enter a valid description of expense"
+                })
+            }
         
             res.statusCode = 201;
             res.send({
@@ -157,7 +167,10 @@ router.patch('/reimbursements/:id', async (req, res) => {
 
 });
 
-router.get('/reimbursements/pending', async (req, res) => {
+router.get('/pending', async (req, res) => {
+
+    // console.log("Router for pending reimbursements");
+    // res.send('You have requested pending reimbursements')
 
     //try {
         const authorizationHeader = req.headers.authorization;
@@ -166,39 +179,32 @@ router.get('/reimbursements/pending', async (req, res) => {
         // If token is invalid, it will enter the catch block
         const tokenPayload = await jwtUtil.verifyTokenAndReturnPayload(token);
 
-        if (tokenPayload.role === 'employee') {
-            // if employee, then retrieve all employee's requests
-            console.log('Query by employee');
-               let data = await reimbursementDao.retrieveRequestsByStatus(Pending);
+        if (tokenPayload.role === 'manager') {
+            //if manager, then retrieve ALL reimbursement requests
+            
+            let data = await reimbursementDao.retrieveRequestsByStatus('Pending');
 
-               if (data===undefined){
+            if (data===undefined){
                 res.statusCode = 400;
                 res.send({
                     "message": "No pending reimbursement tickets"
                 })
 
-               } else {
+            } else{
                 res.statusCode = 201;
                 res.send(data.Items);
-               }
-
+            }
                 
-
-            } else if (tokenPayload.role === 'manager') {
-            //if manager, then retrieve ALL reimbursement requests
-            let data = await reimbursementDao.retrieveRequestsByStatus('Pending');
         
-            res.statusCode = 201;
-            res.send(data.Items);
+            
 
+        } else {
+            res.send({
+                "message": "Invalid token"
+            })
         }
 
-    }
-
-
-
-
-);
+    });
 
 
 
